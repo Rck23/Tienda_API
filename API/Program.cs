@@ -9,6 +9,7 @@ builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS
 
 builder.Services.AddControllers();
 
+//INPLEMENTAMOS EL SERVICIO Y CONECCION DE MySql
 builder.Services.AddDbContext<TiendaContext>(options =>
 {
     var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// APLICA CUALQUIER MIGRACIÓN QUE SE REALIZA DE MANER ASINCRONA A LA BASE DE DATOS
+// TAMBIEN CREA LA BASE DE DATOS SI NO EXISTE
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;

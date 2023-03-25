@@ -14,11 +14,15 @@ public class TiendaContextSeed
 
             if (!context.Marcas.Any())
             {
+                // LEER EL CONTENIDO .CSV Y CONVERTIR ESOS ARCHIVOS A UN LISTADO DE TIPO ENTIDAD MARCAS
+
                 using (var readerMarcas = new StreamReader(ruta + @"/Data/Csvs/marcas.csv"))
                 {
                     using (var csvMarcas = new CsvReader(readerMarcas, CultureInfo.InvariantCulture))
                     {
+                        //AQUI ES EL LISTADO DE MARCAS EN TIPO Y ENUMERA POR MARCA
                         var marcas = csvMarcas.GetRecords<Marca>();
+                        //AGREGAMOS LAS MARCAS
                         context.Marcas.AddRange(marcas);
                         await context.SaveChangesAsync();
                     }
@@ -27,10 +31,13 @@ public class TiendaContextSeed
 
             if (!context.Categorias.Any())
             {
+                // LEER EL CONTENIDO .CSV Y CONVERTIR ESOS ARCHIVOS A UN LISTADO DE TIPO ENTIDAD CATEGORIAS
                 using (var readerCategorias = new StreamReader(ruta + @"/Data/Csvs/categorias.csv"))
                 {
                     using (var csvCategorias = new CsvReader(readerCategorias, CultureInfo.InvariantCulture))
                     {
+                        //AQUI ES EL LISTADO DE CATEGORIAS EN TIPO Y ENUMERA POR CATEGORIAS
+
                         var categorias = csvCategorias.GetRecords<Categoria>();
                         context.Categorias.AddRange(categorias);
                         await context.SaveChangesAsync();
@@ -40,6 +47,8 @@ public class TiendaContextSeed
 
             if (!context.Productos.Any())
             {
+                // LEER EL CONTENIDO .CSV Y CONVERTIR ESOS ARCHIVOS A UN LISTADO DE TIPO ENTIDAD CATEGORIAS
+
                 using (var readerProductos = new StreamReader(ruta + @"/Data/Csvs/productos.csv"))
                 {
                     using (var csvProductos = new CsvReader(readerProductos, CultureInfo.InvariantCulture))

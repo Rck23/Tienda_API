@@ -13,7 +13,7 @@ public class ProductoRepository : GenericRepository<Producto>, IProductoReposity
     }
 
 
-    public async Task<IEnumerable<Producto>> GetProductoMasCaros(int cantidad) =>
+    public async Task<IEnumerable<Producto>> GetProductosMasCaros(int cantidad) =>
     
         await _context.Productos
                   .OrderByDescending(p => p.Precio).Take(cantidad).ToListAsync();

@@ -1,6 +1,7 @@
 ﻿
 
 using Core.Entities;
+using Core.Intefaces;
 using Grpc.Core;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,18 @@ namespace API.Controllers;
 [ApiController]
 public class ProductosController : BaseApiController
 {
-    private readonly TiendaContext _context;
-    public ProductosController(TiendaContext context)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public ProductosController(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        //EL CONTENEDOR DE REPOSITORIOS ES LA UNIDAD DE TRABAJO
+       _unitOfWork = unitOfWork;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Producto>>> Get()
     {
-        var productos = await _context.Productos.ToListAsync();
+        var productos = await _unitOfWork.Productos.GetAllAsync();
 
         return Ok(productos);
     }
@@ -29,8 +32,23 @@ public class ProductosController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult> Get(int id)
     {
-        var producto = await _context.Productos.FindAsync(id);
+        var producto = await _unitOfWork.Productos.GetByIdAsync(id);
 
         return Ok(producto);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<Producto>> Post(Producto producto)
+    {
+        _unitOfWork.Productos.Add(producto);
+        _unitOfWork.Save();
+
+        if(producto == null)
+        {
+           return BadRequest();
+        }
+
+        return CreatedAtAction(nameof(Post), new {id=producto.Id}, producto);
+    }
+
 }

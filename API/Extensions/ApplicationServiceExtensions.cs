@@ -1,4 +1,8 @@
-﻿namespace API.Extensions;
+﻿using Core.Intefaces;
+using Infrastructure.Repositories;
+using Infrastructure.UnitOfWork;
+
+namespace API.Extensions;
 
 public static class ApplicationServiceExtensions
 {
@@ -12,4 +16,17 @@ public static class ApplicationServiceExtensions
                 .AllowAnyMethod() // metodos como GET, POST
                 .AllowAnyHeader()); // Aceptacion de "Content-Type", "Accept"
         });
+
+    // IMPLEMENTACION DE TODOS LOS REPOSITORIOS
+    public static void AddAplicacionServices(this IServiceCollection services)
+    {
+             // REPOSITORIOS DE FORMA MANUAL
+        //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        //services.AddScoped<IProductoReposity, ProductoRepository>(); 
+        //services.AddScoped<IMarcaReposity, MarcaReposity>();
+        //services.AddScoped<ICategoriaReposity, CategoriaReposity>();
+
+        // AQUI YA CONTIENE TODOS LOS REPOSITORIOS
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
 }

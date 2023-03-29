@@ -9,6 +9,9 @@ builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS
 
 builder.Services.AddControllers();
 
+//IMPLEMENTAMOS EL SERVICIO QUE NOS PERMITE USAR LOS REPOSITORIOS EN CUALQUIER COMPONENTE
+builder.Services.AddAplicacionServices();
+
 //INPLEMENTAMOS EL SERVICIO Y CONECCION DE MySql
 builder.Services.AddDbContext<TiendaContext>(options =>
 {

@@ -52,6 +52,8 @@ using (var scope = app.Services.CreateScope())
 	}
 }
 
+
+
 // AGREGACION DE LA POLITICA DE CORS
 app.UseCors("CorsPolicy");
 

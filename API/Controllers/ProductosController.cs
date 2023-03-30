@@ -37,6 +37,7 @@ public class ProductosController : BaseApiController
         return Ok(producto);
     }
 
+    // POST: api/Productos
     [HttpPost]
     public async Task<ActionResult<Producto>> Post(Producto producto)
     {
@@ -51,4 +52,35 @@ public class ProductosController : BaseApiController
         return CreatedAtAction(nameof(Post), new {id=producto.Id}, producto);
     }
 
+    //PUT: api/Productos/id
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Producto>> Put(int id, [FromBody]Producto producto)
+    {
+        if (producto == null)
+        {
+            return NotFound();
+        }
+
+        _unitOfWork.Productos.Update(producto);
+        _unitOfWork.Save();
+
+        return producto;
+    }
+
+    //DELETE: api/productos/id 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete (int id)
+    {
+        var producto = await _unitOfWork.Productos.GetByIdAsync (id);
+
+        if (producto == null)
+        {
+            return NotFound();
+        }
+
+        _unitOfWork.Productos.Remove(producto);
+        _unitOfWork.Save();
+
+        return NoContent();
+    }
 }

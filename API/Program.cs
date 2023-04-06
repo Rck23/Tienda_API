@@ -1,9 +1,11 @@
 using API.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly()); // SERVICIO DE AUTOMAPPER 
 // Add services to the container.
 builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS	
 

@@ -17,5 +17,23 @@ public class ProductoRepository : GenericRepository<Producto>, IProductoReposity
     
         await _context.Productos
                   .OrderByDescending(p => p.Precio).Take(cantidad).ToListAsync();
-    
+
+    public override async Task<Producto> GetByIdAsync(int id)
+    {
+        return await _context.Productos
+            .Include(p => p.Marca)
+            .Include(p => p.Categoria)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    // SOBREESCRIBIENDO EL METODO DE GENERIC REPOSITORY
+    public override async Task<IEnumerable<Producto>> GetAllAsync()
+    {
+        return await _context.Productos
+            .Include(u => u.Marca)
+            .Include(u => u.Categoria)
+            .ToListAsync();
+    }
+ 
+
 }

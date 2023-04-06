@@ -54,9 +54,9 @@ public class UnitOfWork: IUnitOfWork, IDisposable
     }
 
     // GUARDA LOS CAMBIOS EN EL CONTEXTO
-    public int Save()
+    public async Task<int> SaveAsync()
     {
-        return _context.SaveChanges();
+        return await _context.SaveChangesAsync();
     }
 
     public void Dispose()

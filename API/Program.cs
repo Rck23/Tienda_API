@@ -1,4 +1,5 @@
 using API.Extensions;
+using AspNetCoreRateLimit;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -6,10 +7,22 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly()); // SERVICIO DE AUTOMAPPER 
+
+builder.Services.ConfigureRateLimitiong(); // SERVICIO DE RATELIMIT
+
+builder.Services.ConfigureApiVersioning();
 // Add services to the container.
 builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS	
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    // INSTRUCCION PARA PERMITIR EL FORMATO XML
+    options.RespectBrowserAcceptHeader = true;
+
+    // MENSAJE DE ERROR EN CASO DE QUE EL SERVIDOR NO SOPORTE EL FORMATO QUE EL CLIENTE SOLICITO
+    options.ReturnHttpNotAcceptable = true; 
+
+}).AddXmlSerializerFormatters();
 
 //IMPLEMENTAMOS EL SERVICIO QUE NOS PERMITE USAR LOS REPOSITORIOS EN CUALQUIER COMPONENTE
 builder.Services.AddAplicacionServices();
@@ -26,6 +39,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// AGREGACION PARA EL MIDDLEWARE DE RATELIMIT 
+app.UseIpRateLimiting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

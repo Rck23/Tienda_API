@@ -15,4 +15,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     void RemoveRange(IEnumerable<T> entities); //elimina una lista de entidades al contexto
     void Update(T entity); //Actualiza el contexto
 
+    // Metodo de la paginación
+    Task<(int totalRegistros, IEnumerable<T> registros)> GetAllAsync(int pageIndex, int pageSize, string search);
+
 }

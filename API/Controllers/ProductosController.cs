@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using API.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Intefaces;
@@ -8,6 +9,9 @@ namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
+[ApiVersion("1.0")]
+[ApiVersion("1.1")]
 public class ProductosController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -21,12 +25,29 @@ public class ProductosController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductoListDto>>> Get()
+
+    public async Task<ActionResult<Pager<ProductoListDto>>> Get([FromQuery] Params productParams)
+    {
+        var resultado = await _unitOfWork.Productos.GetAllAsync(productParams.PageIndex,
+            productParams.PageSize, productParams.Search);
+
+        var listaProductosDto = _mapper.Map<List<ProductoListDto>>(resultado.registros);
+
+        Response.Headers.Add("x-InlineCount", resultado.totalRegistros.ToString());
+
+        return new Pager<ProductoListDto>(listaProductosDto, resultado.totalRegistros,
+            productParams.PageSize, productParams.PageIndex, productParams.Search); 
+    }
+
+
+    [HttpGet]
+    [MapToApiVersion("1.1")] // ESTO INDICA LA VERSION DEL METODO
+    public async Task<ActionResult<IEnumerable<ProductoDto>>> Get11()
     {
         var productos = await _unitOfWork.Productos.GetAllAsync();
 
 
-        return _mapper.Map<List<ProductoListDto>>(productos);
+        return _mapper.Map<List<ProductoDto>>(productos);
     }
 
     [HttpGet("{id}")]

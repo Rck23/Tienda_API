@@ -176,5 +176,5 @@ namespace Infrastructure.Data.Migrations
                 table: "Productos",
                 column: "Id");
         }
-    }    
+    }
 }

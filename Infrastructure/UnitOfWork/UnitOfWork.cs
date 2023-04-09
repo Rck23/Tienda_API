@@ -5,16 +5,16 @@ using Infrastructure.Repositories;
 
 namespace Infrastructure.UnitOfWork;
 
-public class UnitOfWork: IUnitOfWork, IDisposable
+public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly TiendaContext _context;
-    private  IProductoReposity _productos;
-    private  IMarcaReposity _marcas;
-    private  ICategoriaReposity _categorias;
+    private IProductoReposity _productos;
+    private IMarcaReposity _marcas;
+    private ICategoriaReposity _categorias;
 
     public UnitOfWork(TiendaContext context)
     {
-       _context = context;
+        _context = context;
     }
 
     //CARGA DE LOS REPOSITORIOS DE FORMA RETARDADA (Solo cuando el usuario acceda aparecera el repositorio)
@@ -22,7 +22,8 @@ public class UnitOfWork: IUnitOfWork, IDisposable
     {
         get
         {
-            if (_categorias == null){
+            if (_categorias == null)
+            {
                 _categorias = new CategoriaReposity(_context);
             }
             return _categorias;

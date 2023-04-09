@@ -65,7 +65,7 @@ public class TiendaContextSeed
                                 Precio = item.Precio,
                                 FechaCreacion = item.FechaCreacion,
                                 CategoriaId = item.CategoriaId,
-                                MarcaId = item.MarcaId                        
+                                MarcaId = item.MarcaId
                             });
                         }
 

@@ -38,20 +38,20 @@ if (app.Environment.IsDevelopment())
 // TAMBIEN CREA LA BASE DE DATOS SI NO EXISTE
 using (var scope = app.Services.CreateScope())
 {
-	var services = scope.ServiceProvider;
-	var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-	try
-	{
-		var context = services.GetRequiredService<TiendaContext>();
-		await context.Database.MigrateAsync();
+    var services = scope.ServiceProvider;
+    var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+    try
+    {
+        var context = services.GetRequiredService<TiendaContext>();
+        await context.Database.MigrateAsync();
 
-		await TiendaContextSeed.SeedAsync(context, loggerFactory);
-	}
-	catch (Exception ex)
-	{
-		var logger = loggerFactory.CreateLogger<Program>();
-		logger.LogError(ex, "Ocurrió un error durante la migración");
-	}
+        await TiendaContextSeed.SeedAsync(context, loggerFactory);
+    }
+    catch (Exception ex)
+    {
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "Ocurrió un error durante la migración");
+    }
 }
 
 

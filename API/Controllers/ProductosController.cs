@@ -1,13 +1,8 @@
-﻿
-
-using API.Dtos;
+﻿using API.Dtos;
 using AutoMapper;
 using Core.Entities;
 using Core.Intefaces;
-using Grpc.Core;
-using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -21,8 +16,8 @@ public class ProductosController : BaseApiController
     public ProductosController(IUnitOfWork unitOfWork, IMapper mapper)
     {
         //EL CONTENEDOR DE REPOSITORIOS ES LA UNIDAD DE TRABAJO
-       _unitOfWork = unitOfWork;
-       _mapper = mapper;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -39,11 +34,11 @@ public class ProductosController : BaseApiController
     {
         var producto = await _unitOfWork.Productos.GetByIdAsync(id);
 
-        if(producto == null)
+        if (producto == null)
         {
             return NotFound();
         }
-        return _mapper.Map<ProductoDto>(producto);  
+        return _mapper.Map<ProductoDto>(producto);
     }
 
     // POST: api/Productos
@@ -51,23 +46,23 @@ public class ProductosController : BaseApiController
     public async Task<ActionResult<Producto>> Post(ProductoAddUpdateDto productoDto)
     {
         // MAPEAR EL PRODUCTO
-        var producto = _mapper.Map<Producto>(productoDto); 
+        var producto = _mapper.Map<Producto>(productoDto);
 
         _unitOfWork.Productos.Add(producto);
         await _unitOfWork.SaveAsync();
 
-        if(producto == null)
+        if (producto == null)
         {
-           return BadRequest();
+            return BadRequest();
         }
 
         productoDto.Id = producto.Id;
-        return CreatedAtAction(nameof(Post), new {id=productoDto.Id}, productoDto);
+        return CreatedAtAction(nameof(Post), new { id = productoDto.Id }, productoDto);
     }
 
     //PUT: api/Productos/id
     [HttpPut("{id}")]
-    public async Task<ActionResult<ProductoAddUpdateDto>> Put(int id, [FromBody]ProductoAddUpdateDto productoDto)
+    public async Task<ActionResult<ProductoAddUpdateDto>> Put(int id, [FromBody] ProductoAddUpdateDto productoDto)
     {
         if (productoDto == null)
         {
@@ -84,9 +79,9 @@ public class ProductosController : BaseApiController
 
     //DELETE: api/productos/id 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete (int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var producto = await _unitOfWork.Productos.GetByIdAsync (id);
+        var producto = await _unitOfWork.Productos.GetByIdAsync(id);
 
         if (producto == null)
         {

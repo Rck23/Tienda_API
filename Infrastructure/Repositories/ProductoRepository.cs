@@ -1,20 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Core.Entities;
+﻿using Core.Entities;
 using Core.Intefaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class ProductoRepository : GenericRepository<Producto>, IProductoReposity
 {
-    public ProductoRepository(TiendaContext context): base(context)
+    public ProductoRepository(TiendaContext context) : base(context)
     {
 
     }
 
 
     public async Task<IEnumerable<Producto>> GetProductosMasCaros(int cantidad) =>
-    
+
         await _context.Productos
                   .OrderByDescending(p => p.Precio).Take(cantidad).ToListAsync();
 
@@ -34,6 +34,6 @@ public class ProductoRepository : GenericRepository<Producto>, IProductoReposity
             .Include(u => u.Categoria)
             .ToListAsync();
     }
- 
+
 
 }

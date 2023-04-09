@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Infrastructure.Data;
 public class TiendaContext : DbContext
 {
-        
+
     public TiendaContext(DbContextOptions options) : base(options)
     {
     }

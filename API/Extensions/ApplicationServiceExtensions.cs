@@ -1,5 +1,4 @@
 ﻿using Core.Intefaces;
-using Infrastructure.Repositories;
 using Infrastructure.UnitOfWork;
 
 namespace API.Extensions;
@@ -20,7 +19,7 @@ public static class ApplicationServiceExtensions
     // IMPLEMENTACION DE TODOS LOS REPOSITORIOS
     public static void AddAplicacionServices(this IServiceCollection services)
     {
-             // REPOSITORIOS DE FORMA MANUAL
+        // REPOSITORIOS DE FORMA MANUAL
         //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         //services.AddScoped<IProductoReposity, ProductoRepository>(); 
         //services.AddScoped<IMarcaReposity, MarcaReposity>();

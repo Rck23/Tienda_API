@@ -11,6 +11,8 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private IProductoReposity _productos;
     private IMarcaReposity _marcas;
     private ICategoriaReposity _categorias;
+    private IRolRepository _roles; 
+    private IUsuarioRepository _usuarios;
 
     public UnitOfWork(TiendaContext context)
     {
@@ -54,6 +56,29 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         }
     }
 
+    public IRolRepository Rol
+    {
+        get
+        {
+            if (_roles == null)
+            {
+                _roles = new RolRepository(_context);
+            }
+            return _roles;
+        }
+    }
+
+    public IUsuarioRepository Usuarios
+    {
+        get
+        {
+            if (_usuarios == null)
+            {
+                _usuarios = new UsuarioRepository(_context);
+            }
+            return _usuarios;
+        }
+    }
     // GUARDA LOS CAMBIOS EN EL CONTEXTO
     public async Task<int> SaveAsync()
     {

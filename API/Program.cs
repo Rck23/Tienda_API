@@ -62,6 +62,8 @@ using (var scope = app.Services.CreateScope())
         await context.Database.MigrateAsync();
 
         await TiendaContextSeed.SeedAsync(context, loggerFactory);
+
+        await TiendaContextSeed.SeedRolesAsync(context, loggerFactory);
     }
     catch (Exception ex)
     {

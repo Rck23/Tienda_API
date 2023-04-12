@@ -56,7 +56,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         }
     }
 
-    public IRolRepository Rol
+    public IRolRepository Roles
     {
         get
         {

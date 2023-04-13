@@ -30,7 +30,17 @@ public class UserService : IUserService
             ApellidoPaterno = registerDto.ApellidoPaterno,
             Email = registerDto.Email,
             Username = registerDto.Username
-        };
+
+            // EJEMPLO DE NUEVO REGISTRO
+            //{ 
+            //    "nombres":"Ulises",
+	           // "apellidoPaterno":"Martínez",
+	           // "apellidoMaterno":"Yo",
+	           // "email":"miCorreo@gmail.com",
+	           // "username":"ulises23",
+	           // "password":"123456"
+            //}
+         };
 
         // ENCRIPTAMOS EL PASSWORD
         usuario.Password = _passwordHasher.HashPassword(usuario, registerDto.Password);

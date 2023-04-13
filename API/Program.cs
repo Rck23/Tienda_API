@@ -14,6 +14,11 @@ builder.Services.ConfigureApiVersioning();
 // Add services to the container.
 builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS	
 
+
+// CONFIGURACION DE TOKEN 
+builder.Services.AddJwt(builder.Configuration); 
+
+
 builder.Services.AddControllers(options =>
 {
     // INSTRUCCION PARA PERMITIR EL FORMATO XML
@@ -78,6 +83,8 @@ using (var scope = app.Services.CreateScope())
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

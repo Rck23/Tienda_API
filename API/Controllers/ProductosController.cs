@@ -3,6 +3,7 @@ using API.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Intefaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -12,6 +13,7 @@ namespace API.Controllers;
 
 [ApiVersion("1.0")]
 [ApiVersion("1.1")]
+[Authorize(Roles = "Administrador")]
 public class ProductosController : BaseApiController
 {
     private readonly IUnitOfWork _unitOfWork;

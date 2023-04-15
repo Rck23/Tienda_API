@@ -28,6 +28,8 @@ public class UsuariosController : BaseApiController
     {
         var result = await _userService.GetTokenAsync(model);
 
+        SetRefreshTokenInCookie(result.RefreshToken); // asigna el token en la cookie llamada "refreshToken"
+
         return Ok(result);
     }
 
@@ -37,5 +39,34 @@ public class UsuariosController : BaseApiController
         var result = await _userService.AddRoleAsync(model);
 
         return Ok(result);
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        var refreshToken = Request.Cookies["refreshToken"]; //ESTO LEE EL TOKEN QUE SE ESTA EN LA COOKIE
+
+        var response = await _userService.RefreshTokenAsync(refreshToken); // OBTENEMOS NUEVO TOKEN
+
+        if (!string.IsNullOrEmpty(response.RefreshToken))
+        {
+            SetRefreshTokenInCookie(response.RefreshToken); // SI EL TOKEN NO ES VALIDO SE ENVIA EL MENSAJE
+        }
+
+        // ESTABLECEMOS EL REFRESH TOKEN Y ENVIAMOS LA RESPUESTA
+        return Ok(response);
+    }
+
+    // PONER TOKEN EN COOKIE 
+    private void SetRefreshTokenInCookie(string refreshToken)
+    {
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTime.UtcNow.AddDays(10),
+        };
+
+        Response.Cookies.Append("refreshToken", refreshToken, cookieOptions); 
     }
 }

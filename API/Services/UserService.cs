@@ -38,12 +38,12 @@ public class UserService : IUserService
 
             // EJEMPLO DE NUEVO REGISTRO
             //{ 
-            //    "nombres":"Ulises",
-	           // "apellidoPaterno":"Martínez",
-	           // "apellidoMaterno":"Yo",
-	           // "email":"miCorreo@gmail.com",
-	           // "username":"ulises23",
-	           // "password":"123456"
+            //    "nombres":"",
+	           // "apellidoPaterno":"",
+	           // "apellidoMaterno":"",
+	           // "email":"...@gmail.com",
+	           // "username":"",
+	           // "password":""
             //}
          };
 

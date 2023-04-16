@@ -1,7 +1,9 @@
 using API.Extensions;
+using API.Helpers.Errors;
 using AspNetCoreRateLimit;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +13,19 @@ builder.Services.AddAutoMapper(Assembly.GetEntryAssembly()); // SERVICIO DE AUTO
 builder.Services.ConfigureRateLimitiong(); // SERVICIO DE RATELIMIT
 
 builder.Services.ConfigureApiVersioning();
+
 // Add services to the container.
 builder.Services.ConfigureCors(); // ESTABLECIDO LOS CORS	
+
+
+// CONFIGURACION DE SERILOG
+var logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(builder.Configuration) 
+                    .Enrich.FromLogContext()
+                    .CreateLogger();
+
+/*builder.Logging.ClearProviders();*/ // LIMPIAR
+builder.Logging.AddSerilog(logger);
 
 
 // CONFIGURACION DE TOKEN 
@@ -32,6 +45,10 @@ builder.Services.AddControllers(options =>
 //IMPLEMENTAMOS EL SERVICIO QUE NOS PERMITE USAR LOS REPOSITORIOS EN CUALQUIER COMPONENTE
 builder.Services.AddAplicacionServices();
 
+// CONTROL DE VALIDACIONES MODELSTATE
+builder.Services.AddValidationErrors();
+
+
 //INPLEMENTAMOS EL SERVICIO Y CONECCION DE MySql
 builder.Services.AddDbContext<TiendaContext>(options =>
 {
@@ -44,6 +61,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// MANEJO DE EXCEPCIONES 
+app.UseMiddleware<ExceptionMiddleware>();
+
+// VALIDACION RECURSOS NO EXISTENTES
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 // AGREGACION PARA EL MIDDLEWARE DE RATELIMIT 
 app.UseIpRateLimiting();
@@ -72,8 +95,8 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogError(ex, "Ocurrió un error durante la migración");
+        var _logger = loggerFactory.CreateLogger<Program>();
+        _logger.LogError(ex, "Ocurrió un error durante la migración");
     }
 }
 

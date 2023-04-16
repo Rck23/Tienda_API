@@ -1,4 +1,5 @@
 ﻿using API.Helpers;
+using API.Helpers.Errors;
 using API.Services;
 using AspNetCoreRateLimit;
 using Core.Entities;
@@ -129,4 +130,23 @@ public static class ApplicationServiceExtensions
             });
     }
 
+    public static void AddValidationErrors(this IServiceCollection services)
+    {
+        services.Configure<ApiBehaviorOptions>(options => {
+
+            options.InvalidModelStateResponseFactory = ActionContext =>
+            {
+                var errors = ActionContext.ModelState.Where(u => u.Value.Errors.Count > 0)
+                                                        .SelectMany(u=> u.Value.Errors)
+                                                        .Select(u => u.ErrorMessage).ToArray();
+
+                var errorResponse = new ApiValidation()
+                {
+                    Errors = errors
+                };
+
+                return new BadRequestObjectResult(errorResponse);
+            };
+        });
+    }
 }
